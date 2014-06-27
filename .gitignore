@@ -4,3 +4,5 @@
 /.settings/*
 /.settings
 /.classpath
+/.cache
+/.springBeans
