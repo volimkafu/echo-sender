@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:context="http://www.springframework.org/schema/context"
+   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+<!--  <context:annotation-config />
+   <context:component-scan base-package="com.exo.engine" />
+ -->
+ 
+   <import resource="classpath:data-source.xml" />
+   <import resource="classpath:mail-source.xml" />
+
+   <bean id="echo.data-access-service" class="com.exo.model.dao.DataAccessServiceImpl">
+      <constructor-arg value="test" />
+      <constructor-arg ref="echo.db.client" />
+   </bean>
+
+   <bean id="echo.data-service" class="com.exo.model.service.EchoDataServiceImpl">
+      <constructor-arg ref="echo.data-access-service" />
+   </bean>
+
+   <!-- AN: IMPORTANT: do not instantiate workers in spring config - master requests beans creation too rapidly, spring reflection 
+      chokes. Create workers in AppCofiguration.scala in programmatic way
+      -->
+   <!-- 
+    <bean id="echo.engine.campaign-worker" scope="prototype" class="com.exo.engine.CampaignWorker">
+      <property name="mailService">
+         <bean class="com.exo.container.MockEchoMailService" />
+      </property>
+   </bean> -->
+
+    <bean id="echo.engine.campaign-master.number-of-workers" class="java.lang.Integer">
+        <constructor-arg value="10"/>
+    </bean>
+</beans>
