@@ -15,8 +15,4 @@ public interface DataAccessService {
 	DBCursor findCollection(String collectionName,
 			Map<String, Object> filterParams, int offset, int maxElements);
 
-//	<T> JacksonDBCollection<T, String> findCollection(Class<T> type,
-//			String collectionName, Map<String, Object> filterParams,
-//			int offset, int maxElements, String[] requestedFieldNames);
-
 }

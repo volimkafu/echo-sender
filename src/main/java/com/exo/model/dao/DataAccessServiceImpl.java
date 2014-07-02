@@ -38,7 +38,6 @@ public class DataAccessServiceImpl implements DataAccessService {
 
 		return collection.find(query).skip(offset).limit(maxElements);
 	}
-
 	
 	@Override
 	public DBObject findRecordById(String collectionName, String id,

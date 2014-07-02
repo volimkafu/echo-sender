@@ -40,6 +40,7 @@ class AppConfiguration extends FunctionalConfiguration {
   val campaignWorkerActor = bean("echo.engine.campaign-worker", scope = BeanDefinition.SCOPE_PROTOTYPE) {
     val ca = new CampaignWorker
     ca.mailService = getBean[EchoMailService[EmailMessage]]("echo.mail-service")
+    ca.dataService = getBean[EchoDataService]("echo.data-service")
     ca
   }
   

@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.mongojack.ObjectId;
 
+import com.exo.model.exception.InvalidModelObjectException;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -58,13 +59,33 @@ public class Contact {
 	public List<ContactParticipationInCampaign> getCampaigns() {
 		return campaigns;
 	}
-	
-	public void markAsSent(String campaignId, boolean hasBeenSent){
+
+	public void markAsSent(String campaignId, boolean hasBeenSent) {
+		for (Iterator<ContactParticipationInCampaign> iter = campaigns
+				.iterator(); iter.hasNext();) {
+			ContactParticipationInCampaign p = iter.next();
+			if (p.campaignId.equals(campaignId))
+				p.statuses.add(
+						hasBeenSent ? EmailStatus.SENT_SUCCESSFULLY.getStatus()
+								: EmailStatus.SEND_FAILED.getStatus());
+		}
+	}
+
+	public ContactParticipationInCampaign getCampaign(String campaignId) throws InvalidModelObjectException{
 		for( Iterator<ContactParticipationInCampaign> iter = campaigns.iterator(); iter.hasNext();){
 			ContactParticipationInCampaign p =iter.next();
 			if (p.campaignId.equals(campaignId))
-				p.statuses.add(EmailStatus.SENT_SUCCESSFULLY.getStatus());
+				return p;
 		}
+		throw new InvalidModelObjectException("Campaign with id " + campaignId
+				+ " doesn't exist for this contact");
+	}
+
+	@Override
+	public String toString() {
+		return "Contact [id=" + id + ", email=" + email + ", firstName="
+				+ firstName + ", lastName=" + lastName + ", campaigns size="
+				+ campaigns.size() + "]";
 	}
 
 }

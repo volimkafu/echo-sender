@@ -53,7 +53,6 @@ class CampaignMasterTest
     "Test",
     "empty")
 
-  //"Campaign Master" should "call workers twice" in {
   @Test
   def handleChainRequestTest() {
 //    Send a letter

@@ -20,4 +20,6 @@ public interface EchoDataService {
 
 	Contact findContactById(String id) throws EchoDataServiceException;
 
+	void updateContact(Contact contact) throws EchoDataServiceException;
+
 }

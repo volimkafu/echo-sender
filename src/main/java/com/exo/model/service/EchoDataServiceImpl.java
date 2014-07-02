@@ -100,6 +100,25 @@ public class EchoDataServiceImpl implements EchoDataService {
 		}
 	}
 
+	@Override
+	public void updateContact(Contact contact) throws EchoDataServiceException {
+		
+		Query query = DBQuery.is("_id", contact.getId());
+		try{
+			JacksonDBCollection<Contact, String> coll = fetchCollection(COLLECTION_CONTACTS, Contact.class);
+			coll.update(query, contact);
+		} catch (Exception e) {
+			throw new EchoDataServiceException("Failed to update contact " + contact, e);
+		}
+	}
+
+	protected<T> JacksonDBCollection<T, String> fetchCollection(String collectionName,Class<T> type) {
+		DBCollection dbCollection = dao.findCollection(collectionName);
+		JacksonDBCollection<T, String> coll = JacksonDBCollection.wrap(
+				dbCollection, type, String.class);
+		return coll;
+	}
+	
 	protected <T> List<T> jacksonAsJavaCollection(
 			JacksonDBCollection<T, String> coll) {
 		return coll.find().toArray();
@@ -112,11 +131,10 @@ public class EchoDataServiceImpl implements EchoDataService {
 	}
 
 	protected <T> T findOne(String id, String collectionName, Class<T> type) {
-		DBCollection dbCollection = dao.findCollection(collectionName);
-		JacksonDBCollection<T, String> collection = JacksonDBCollection.wrap(
-				dbCollection, type, String.class);
 
-		T record = collection.findOneById(id);
+		JacksonDBCollection<T, String> coll = fetchCollection(collectionName, type);
+
+		T record = coll.findOneById(id);
 
 		return record;
 	}
@@ -124,9 +142,7 @@ public class EchoDataServiceImpl implements EchoDataService {
 	protected DBCursor<Contact> jacksonCursorForContactsByCampaignId(
 			String campaignId) {
 
-		DBCollection dbCollection = dao.findCollection(COLLECTION_CONTACTS);
-		JacksonDBCollection<Contact, String> coll = JacksonDBCollection.wrap(
-				dbCollection, Contact.class, String.class);
+		JacksonDBCollection<Contact, String> coll = fetchCollection(COLLECTION_CONTACTS,Contact.class);
 
 		Query query = DBQuery.is("campaign_id", campaignId);
 		DBCursor<Contact> cursor = coll.find().elemMatch("campaigns", query);

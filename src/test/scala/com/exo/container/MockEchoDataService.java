@@ -73,4 +73,10 @@ public class MockEchoDataService implements EchoDataService{
 		return null;
 	}
 
+	@Override
+	public void updateContact(Contact contact) throws EchoDataServiceException {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -11,13 +11,15 @@ import akka.actor.UntypedActor
 import akka.actor.actorRef2Scala
 import com.exo.engine.letter_type.LinkSucceded
 import com.exo.engine.letter_type.LinkRequest
+import com.exo.model.service.EchoDataService
 
 class CampaignWorker extends Actor {
 
   val log = LoggerFactory.getLogger(classOf[CampaignWorker])
 
-//FIXME:: @scala.reflect.BeanProperty -- injecting from scala AppConfig, will uncomment when inject from spring config 
   var mailService: EchoMailService[EmailMessage] = _
+  
+  var dataService: EchoDataService = _
 
   override def receive = {
 
@@ -41,6 +43,7 @@ class CampaignWorker extends Actor {
             countFailureTargets += 1
 
           contact.markAsSent(campaign.getId(), hasBeenSent)
+          dataService.updateContact(contact)
       }
 
       log.info(s"Sent to (success, failure) : ($countSuccessTargets, $countFailureTargets). Done.")
