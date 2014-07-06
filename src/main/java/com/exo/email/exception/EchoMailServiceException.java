@@ -1,4 +1,4 @@
-package com.exo.model.exception;
+package com.exo.email.exception;
 
 public class EchoMailServiceException extends Exception{
 

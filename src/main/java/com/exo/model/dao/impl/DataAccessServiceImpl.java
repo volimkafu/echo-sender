@@ -1,4 +1,4 @@
-package com.exo.model.dao;
+package com.exo.model.dao.impl;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -7,6 +7,7 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.exo.model.dao.DataAccessService;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;

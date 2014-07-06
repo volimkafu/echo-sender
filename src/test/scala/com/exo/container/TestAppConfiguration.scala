@@ -15,7 +15,6 @@ class TestAppConfiguration extends AppConfiguration {
     ca
   }
   
-  //FIXME::move to spring
   override val campaignMasterActor = bean("echo.engine.campaign-master", scope = BeanDefinition.SCOPE_PROTOTYPE) {
     val ca = new CampaignMaster(getBean[Int]("echo.engine.campaign-master.number-of-workers"))
     ca.dataService = new MockEchoDataService()

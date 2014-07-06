@@ -1,4 +1,4 @@
-package com.exo.model.service;
+package com.exo.model.service.impl;
 
 import java.util.List;
 
@@ -11,8 +11,9 @@ import org.slf4j.LoggerFactory;
 
 import com.exo.model.Campaign;
 import com.exo.model.Contact;
-import com.exo.model.dao.DataAccessServiceImpl;
-import com.exo.model.service.exception.EchoDataServiceException;
+import com.exo.model.dao.impl.DataAccessServiceImpl;
+import com.exo.model.exception.EchoDataServiceException;
+import com.exo.model.service.EchoDataService;
 import com.mongodb.DBCollection;
 
 public class EchoDataServiceImpl implements EchoDataService {

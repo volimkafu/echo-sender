@@ -11,16 +11,17 @@
    <import resource="classpath:data-source.xml" />
    <import resource="classpath:mail-source.xml" />
 
-   <bean id="echo.data-access-service" class="com.exo.model.dao.DataAccessServiceImpl">
+   <bean id="echo.data-access-service" class="com.exo.model.dao.impl.DataAccessServiceImpl">
       <constructor-arg value="test" />
       <constructor-arg ref="echo.db.client" />
    </bean>
 
-   <bean id="echo.data-service" class="com.exo.model.service.EchoDataServiceImpl">
+   <bean id="echo.data-service" class="com.exo.model.service.impl.EchoDataServiceImpl">
       <constructor-arg ref="echo.data-access-service" />
    </bean>
 
-   <!-- AN: IMPORTANT: do not instantiate workers in spring config - master requests beans creation too rapidly, spring reflection 
+   <!-- AN: IMPORTANT: do not instantiate workers in spring config - 
+   master requests beans creation too rapidly, spring reflection 
       chokes. Create workers in AppCofiguration.scala in programmatic way
       -->
    <!-- 
@@ -33,4 +34,5 @@
     <bean id="echo.engine.campaign-master.number-of-workers" class="java.lang.Integer">
         <constructor-arg value="10"/>
     </bean>
+    
 </beans>

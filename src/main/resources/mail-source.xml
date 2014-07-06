@@ -7,7 +7,7 @@
 
    <util:properties id="echo.mail.props" location="classpath:/mailer/prod-mailer.properties" />
 
-   <bean class="com.exo.email.service.EchoMailServiceImpl" id="echo.mail-service">
+   <bean class="com.exo.email.service.impl.EchoMailServiceImpl" id="echo.mail-service">
       <constructor-arg ref="echo.mail.props" />
    </bean>
    

@@ -10,10 +10,10 @@ import com.exo.container.SpringExtentionImpl
 import com.exo.container.TestAppConfiguration
 import com.exo.engine.letter_type.{LinkRequest, LinkSucceded}
 import com.exo.model.{Campaign, Contact}
-import akka.actor.ActorRef
-import akka.actor.ActorSystem
+import akka.actor.{ActorRef, ActorSystem}
 import akka.testkit.ImplicitSender
 import akka.testkit.TestKit
+import com.exo.container.BeansBuilder
 
 @RunWith(classOf[JUnit4ClassRunner])
 class CampaignWorkerTest
@@ -43,16 +43,12 @@ class CampaignWorkerTest
     "empty")
 
   @Rule
-  val actorRef = {
-    implicit val appContext = FunctionalConfigApplicationContext(classOf[TestAppConfiguration])
-    val prop = SpringExtentionImpl(system).props("echo.engine.campaign-worker")
-    system.actorOf(prop, "campaign-worker")
-  }
-
+  val campaignWorker = BeansBuilder(classOf[TestAppConfiguration]).campaignWorker
+  
   @Test
   def invalidRequestTest() {
 
-    val future = actorRef ! contacts
+    val future = campaignWorker ! contacts
 
     expectMsgPF(hint = "correctly rejected the request. ") {
       case ex: IllegalArgumentException => //
@@ -60,9 +56,9 @@ class CampaignWorkerTest
   }
 
   @Test
-  def integrationTest() {
+  def workerTest() {
 
-    val future = actorRef ! LinkRequest(campaign, contacts)
+    val future = campaignWorker ! LinkRequest(campaign, contacts)
 
     expectMsgPF(hint = "successfully ran one worker. ") {
       case LinkSucceded(campaign, contacts) => //just check that it's success, not error

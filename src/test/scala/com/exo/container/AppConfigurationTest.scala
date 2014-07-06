@@ -6,7 +6,7 @@ import org.scalatest.junit.JUnitRunner
 import org.scalatest.FlatSpecLike
 import org.springframework.scala.context.function.FunctionalConfigApplicationContext
 import akka.actor.ActorSystem
-import com.exo.email.service.EchoMailServiceImpl
+import com.exo.email.service.impl.EchoMailServiceImpl
 import akka.actor.ActorRef
 
 @RunWith(classOf[JUnitRunner])

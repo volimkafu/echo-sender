@@ -1,4 +1,4 @@
-package com.exo.email.service;
+package com.exo.email.service.impl;
 
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.spy;
@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.exo.email.EmailMessage;
 import com.exo.email.EmailTarget;
+import com.exo.email.service.EchoMailService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/mail-source.xml" })

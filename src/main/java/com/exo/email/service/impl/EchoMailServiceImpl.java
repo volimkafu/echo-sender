@@ -1,4 +1,4 @@
-package com.exo.email.service;
+package com.exo.email.service.impl;
 
 import java.util.Date;
 import java.util.Properties;
@@ -13,7 +13,8 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
 import com.exo.email.EmailMessage;
-import com.exo.model.exception.EchoMailServiceException;
+import com.exo.email.exception.EchoMailServiceException;
+import com.exo.email.service.EchoMailService;
 import com.sun.mail.smtp.SMTPMessage;
 
 public class EchoMailServiceImpl implements EchoMailService<EmailMessage> {
@@ -84,6 +85,7 @@ public class EchoMailServiceImpl implements EchoMailService<EmailMessage> {
 	}
 
 	
+	@Override
 	public boolean send(EmailMessage message) throws EchoMailServiceException {
 
 		javax.mail.Message msg = createEmailMessage(message);
@@ -92,6 +94,16 @@ public class EchoMailServiceImpl implements EchoMailService<EmailMessage> {
 		return true;
 	}
 
+	protected void sendEmail(EmailMessage message, javax.mail.Message msg) throws EchoMailServiceException {
+		try {
+			transport.sendMessage(msg, new Address[] { new InternetAddress(message.getTarget().getEmail()) });
+		} catch (AddressException e) {
+			throw new EchoMailServiceException("Failed to *send* a message " + message, e);
+		} catch (MessagingException e) {
+			throw new EchoMailServiceException("Failed to *send* a message " + message, e);
+		}
+	}
+	
 	protected javax.mail.Message createEmailMessage(EmailMessage message)
 			throws EchoMailServiceException {
 		javax.mail.Message msg = new SMTPMessage(session);
@@ -109,16 +121,6 @@ public class EchoMailServiceImpl implements EchoMailService<EmailMessage> {
 			throw new EchoMailServiceException("Failed to *create* a message " + message, e);
 		}
 		return msg;
-	}
-
-	protected void sendEmail(EmailMessage message, javax.mail.Message msg) throws EchoMailServiceException {
-		try {
-			transport.sendMessage(msg, new Address[] { new InternetAddress(message.getTarget().getEmail()) });
-		} catch (AddressException e) {
-			throw new EchoMailServiceException("Failed to *send* a message " + message, e);
-		} catch (MessagingException e) {
-			throw new EchoMailServiceException("Failed to *send* a message " + message, e);
-		}
 	}
 
 }

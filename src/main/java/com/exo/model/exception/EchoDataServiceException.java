@@ -1,4 +1,4 @@
-package com.exo.model.service.exception;
+package com.exo.model.exception;
 
 public class EchoDataServiceException extends Exception {
 	private static final long serialVersionUID = 1L;

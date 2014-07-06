@@ -7,8 +7,8 @@ import java.util.List;
 
 import com.exo.model.Campaign;
 import com.exo.model.Contact;
+import com.exo.model.exception.EchoDataServiceException;
 import com.exo.model.service.EchoDataService;
-import com.exo.model.service.exception.EchoDataServiceException;
 
 public class MockEchoDataService implements EchoDataService{
 

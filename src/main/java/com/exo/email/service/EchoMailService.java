@@ -3,7 +3,7 @@ package com.exo.email.service;
 import javax.mail.MessagingException;
 
 import com.exo.email.Message;
-import com.exo.model.exception.EchoMailServiceException;
+import com.exo.email.exception.EchoMailServiceException;
 
 public interface EchoMailService<T extends Message>  {
 
