@@ -16,7 +16,7 @@ class BeansBuilder (configType: Class[ _ <: FunctionalConfiguration]) {
 
   // get hold of the actor system
   val system: ActorSystem = {
-    assert(context != null, "App Context shoud've been created")
+    assert(context != null, "App Context should've been created")
     context.getBean(classOf[ActorSystem])
   }
   

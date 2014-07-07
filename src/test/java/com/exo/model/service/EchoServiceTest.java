@@ -48,8 +48,7 @@ public class EchoServiceTest {
 	private ApplicationContext applicationContext;
 
 	@ClassRule
-	public static InMemoryMongoDb inMemoryMongoDb = newInMemoryMongoDbRule()
-			.build();
+	public static InMemoryMongoDb inMemoryMongoDb = newInMemoryMongoDbRule().build();
 
 	@Rule
 	public MongoDbRule mongoDbRule = newMongoDbRule().defaultSpringMongoDb(

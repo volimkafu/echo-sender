@@ -1,7 +1,6 @@
 package com.exo.model;
 
 import java.util.Arrays;
-import java.util.List;
 
 import org.mongojack.ObjectId;
 
@@ -31,8 +30,6 @@ public class Campaign {
 
 	@JsonProperty("content")
 	protected byte[] content;
-
-	private List<String> targetIds;
 
 	public Campaign() {
 	}
@@ -69,14 +66,6 @@ public class Campaign {
 
 	public byte[] getContent() {
 		return content;
-	}
-
-	public void setTargetIds(List<String> targetIds) {
-		this.targetIds = targetIds;
-	}
-
-	public List<String> getTargetIds() {
-		return targetIds;
 	}
 
 	@Override

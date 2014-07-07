@@ -51,9 +51,9 @@ class CampaignWorker extends Actor {
       sender ! LinkSucceded(campaign, contacts)
 
     case _ =>
-      log.error("Got an unexpected request. Throwing IllegalArgumentException..." )
+      log.error("Worker got an unexpected request. Throwing IllegalArgumentException..." )
       sender ! new IllegalArgumentException(
-        "Don't know how to handle..."
+        "From Worker: Don't know how to handle..."
           + " I deal with objects of type " + classOf[LinkRequest])
   }
 

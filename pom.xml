@@ -52,10 +52,10 @@
                         </pluginExecution>
                      </pluginExecutions>
                   </lifecycleMappingMetadata>
-                    <jvmArgs>
-                        <jvmArg>-Xms64m</jvmArg>
-                        <jvmArg>-Xmx1024m</jvmArg>
-                    </jvmArgs>
+                  <jvmArgs>
+                     <jvmArg>-Xms64m</jvmArg>
+                     <jvmArg>-Xmx1024m</jvmArg>
+                  </jvmArgs>
                </configuration>
             </plugin>
 
@@ -94,6 +94,25 @@
                <version>2.17</version>
             </plugin>
 
+
+            <!-- Integration tests plugin run "mvn verify" to invoke pre-integration-test, integration-test , and post-integration-test 
+               phases. See http://docs.codehaus.org/display/MAVENUSER/Maven+and+Integration+Testing to configure pre-integ resources, i.e. 
+               start jetty to test servlets, start a temp instance of mongodb, etc 
+               <br>
+               Integ tests by default: */IT.java, **/IT.java and */*ITCase.java.
+                -->
+            <plugin>
+               <artifactId>maven-failsafe-plugin</artifactId>
+               <version>2.6</version>
+               <executions>
+                  <execution>
+                     <goals>
+                        <goal>integration-test</goal>
+                        <goal>verify</goal>
+                     </goals>
+                  </execution>
+               </executions>
+            </plugin>
          </plugins>
       </pluginManagement>
 
@@ -387,8 +406,8 @@
                <groupId>org.springframework</groupId>
                <artifactId>spring-beans</artifactId>
             </exclusion>
-             <exclusion>
-              <groupId>org.scala-lang</groupId>
+            <exclusion>
+               <groupId>org.scala-lang</groupId>
                <artifactId>scala-library</artifactId>
             </exclusion>
          </exclusions>
@@ -399,6 +418,7 @@
          <artifactId>scala-library</artifactId>
          <version>${scala.version}</version>
       </dependency>
+ 
    </dependencies>
 
 </project>

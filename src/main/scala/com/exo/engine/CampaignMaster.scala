@@ -12,6 +12,7 @@ import akka.actor.actorRef2Scala
 import net.sf.oval.constraint.NotNull
 import net.sf.oval.constraint.NotEmpty
 import com.exo.engine.letter_type._
+import com.exo.engine.exception.CampaignMasterException
 
 class CampaignMaster(val numberOfWorkers: Int = 1)
   extends Actor
@@ -19,49 +20,64 @@ class CampaignMaster(val numberOfWorkers: Int = 1)
 
   val log = LoggerFactory.getLogger(classOf[CampaignMaster])
 
-  @NotNull		  
+  @NotNull
   var dataService: EchoDataService = _
 
   @NotNull
-  var props:Props = _
-  
+  var props: Props = _
+
   private[this] var stepsTaken = 0
   private[this] var caller: ActorRef = _
-  
-  private[this] var workerRouter:ActorRef = _
-  
+
+  private[this] var workerRouter: ActorRef = _
+
   override def preStart(): Unit = {
-     workerRouter = context.actorOf(props.withRouter(new akka.routing.RoundRobinPool(numberOfWorkers)))
+    workerRouter = context.actorOf(props.withRouter(new akka.routing.RoundRobinPool(numberOfWorkers)))
   }
-  
+
   override def receive = {
 
-  case ChainRequest(campaign) =>
-    caller = sender
+    case ChainRequest(campaign) =>
+      caller = sender
       log.info(s"Received request to send a campaign: {$campaign}")
       val contacts = fetchContactsForCampaign(campaign)
       if (contacts.size < 1)
         caller ! InvalidChainRequest(campaign, s"There are no contacts for requested campaign $campaign")
-        
-      sendToWorkers(campaign, contacts)
 
-    case LinkSucceded(campaign, contacts) => handleWorkerSuccessReply(campaign)
+      try {
+        sendToWorkers(campaign, contacts)
+      } catch {
+        case ex: Exception => errorToSender("Failed to launch a campaign. Received an error from workers...", ex)
+      }
 
-    case _ => //FIXME::Handle Errors
+    case LinkSucceded(campaign, contacts) =>
+      try {
+        handleWorkerSuccessReply(campaign)
+      } catch {
+        case ex: Exception => errorToSender("Failed to understand workers reply...", ex)
+      }
+
+    case _ =>
+      log.error("Master got an unexpected request. Throwing IllegalArgumentException...")
+      sender ! new IllegalArgumentException(
+        "From Master: Don't know how to handle..."
+          + " I deal with objects of type " + classOf[ChainRequest] + " and " + classOf[LinkSucceded])
   }
 
-  protected def sendToWorkers(campaign:Campaign, contacts: List[Contact]): Unit = {
-    
+  protected def errorToSender(msg: String, ex: Exception) = sender ! new CampaignMasterException(msg, ex)
+
+  protected def sendToWorkers(campaign: Campaign, contacts: List[Contact]): Unit = {
+
     //chop contacts into N chunks where N is a number of worker threads  
     val chunks = chunk(contacts, numberOfWorkers)
     log.debug("number of chunks is " + chunks.size)
 
     //tell each worker to process its chunk 
-    chunks.foreach{
-      
-      chunk => 
+    chunks.foreach {
+
+      chunk =>
         workerRouter.tell(LinkRequest(campaign, chunk), self)
-      }
+    }
   }
 
   protected def handleWorkerSuccessReply(campaign: com.exo.model.Campaign): Unit = {
@@ -73,8 +89,8 @@ class CampaignMaster(val numberOfWorkers: Int = 1)
       caller ! ChainSucceded(stepsTaken)
     }
   }
-  
-  private def fetchContactsForCampaign(campaign:Campaign): List[Contact] = {
+
+  private def fetchContactsForCampaign(campaign: Campaign): List[Contact] = {
     //fetch contacts for campaign 
     import scala.collection.JavaConverters._
     dataService.findContactsForCampaign(campaign.getId()).asScala.toList

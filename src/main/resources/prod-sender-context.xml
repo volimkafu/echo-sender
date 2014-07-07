@@ -4,11 +4,11 @@
    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-<!--  <context:annotation-config />
+   <context:annotation-config />
    <context:component-scan base-package="com.exo.engine" />
- -->
- 
-   <import resource="classpath:data-source.xml" />
+
+
+   <import resource="classpath:${env:prod-}data-source.xml" />
    <import resource="classpath:mail-source.xml" />
 
    <bean id="echo.data-access-service" class="com.exo.model.dao.impl.DataAccessServiceImpl">
@@ -20,7 +20,7 @@
       <constructor-arg ref="echo.data-access-service" />
    </bean>
 
-  <bean id="echo.engine.campaign-master.number-of-workers" class="java.lang.Integer">
-        <constructor-arg value="2"/>
-  </bean>
+   <bean id="echo.engine.campaign-master.number-of-workers" class="java.lang.Integer">
+      <constructor-arg value="2" />
+   </bean>
 </beans>

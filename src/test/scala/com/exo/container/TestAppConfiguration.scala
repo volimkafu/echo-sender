@@ -10,15 +10,19 @@ class TestAppConfiguration extends AppConfiguration {
 
   override val campaignWorkerActor = bean("echo.engine.campaign-worker", scope = BeanDefinition.SCOPE_PROTOTYPE) {
     val ca = new CampaignWorker
-    ca.mailService = new MockEchoMailService()
-    ca.dataService = new MockEchoDataService()
+    ca.mailService = mailService
+    ca.dataService = dataService
     ca
   }
   
   override val campaignMasterActor = bean("echo.engine.campaign-master", scope = BeanDefinition.SCOPE_PROTOTYPE) {
     val ca = new CampaignMaster(getBean[Int]("echo.engine.campaign-master.number-of-workers"))
-    ca.dataService = new MockEchoDataService()
+    ca.dataService = dataService
     ca.props = Props(campaignWorkerActor())
     ca
   }
+  
+  override val dataService = new MockEchoDataService()
+  
+  override val mailService = new MockEchoMailService()
 }
