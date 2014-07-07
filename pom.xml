@@ -266,6 +266,10 @@
          <artifactId>javax.servlet-api</artifactId>
          <version>3.1.0</version>
       </dependency>
+      
+      <!-- 
+      mvn install:install-file -Dfile=C:\Users\AN\workspace\echo-sender\lib\pmta.jar -DgroupId=com.port25.pmta -DartifactId=com.port25.pmta -Dversion=1.0.0 -Dpackaging=jar
+       -->
       <dependency>
          <groupId>com.port25.pmta</groupId>
          <artifactId>com.port25.pmta</artifactId>
