@@ -12,6 +12,8 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
+import org.apache.commons.validator.EmailValidator;
+
 import com.exo.email.EmailMessage;
 import com.exo.email.exception.EchoMailServiceException;
 import com.exo.email.service.EchoMailService;

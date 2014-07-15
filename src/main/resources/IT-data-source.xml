@@ -10,7 +10,7 @@
    <context:annotation-config />
   <!--  
   !!!FIXME:: see ApplicationConfiguration.scala - the props are not being read
-  <context:property-placeholder location="classpath:/datamodel/${env:}data-source.properties"
+  <context:property-placeholder location="classpath:/datamodel/${env}data-source.properties"
       ignore-resource-not-found="false" ignore-unresolvable="false" />
  -->
    <bean id="echo.db.client" class="com.mongodb.MongoClient">
@@ -34,7 +34,7 @@
       <constructor-arg name="database" value="${db.schema}" />
       <constructor-arg name="password" value="${db.password}" /> -->
       <constructor-arg name="userName" value="echo-sender" />
-      <constructor-arg name="database" value="echo" />
+      <constructor-arg name="database" value="integration-test-echo" />
       <constructor-arg name="password" value="ex03ender" />
    </bean>
 </beans>

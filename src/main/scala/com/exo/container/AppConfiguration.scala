@@ -22,27 +22,21 @@ import org.springframework.context.annotation.AnnotatedBeanDefinitionReader
 
 object AppConfiguration {
   val appConfiguration = FunctionalConfigApplicationContext(classOf[AppConfiguration])
+//Eagerly init all beans 
   appConfiguration.refresh()
 
   val actorSystem = appConfiguration.getBean(classOf[ActorSystem])
 }
 
-class AppConfiguration extends FunctionalConfiguration {
+class AppConfiguration() extends FunctionalConfiguration {
 
-  //  importXml("classpath:/prod-sender-context.xml")
-  importClass(classOf[DsConfig])
+  importXml(s"classpath:/${sys.props.get("env").get}-sender-context.xml")
 
   /**
    * Load implicit context
    */
   implicit val ctx = beanFactory.asInstanceOf[ApplicationContext]
 
-  override def importClass(annotatedClasses: Class[_]*) {
-   
-    val beanDefinitionReader = new AnnotatedBeanDefinitionReader(beanRegistry, environment)
-    beanDefinitionReader.register(annotatedClasses: _*)
-    beanDefinitionReader.getRegistry().getBeanDefinitionNames().foreach(x => println ("DFDFDFDF"+ x))
-  }
 
   /**
    * Actor system singleton for this application.

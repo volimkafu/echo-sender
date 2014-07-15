@@ -1,0 +1,10 @@
+{
+  "_id" : ObjectId("52fba54fce798c441400002b"),
+  "name" : "Email deliverability webinar invite",
+  "datetime" : null,
+  "from_name" : "EkoBuzz Webinar Update",
+  "from_email" : "webinars@ekobuzz.com",
+  "subject" : "Webinar: How to improve email deliverability? Sign up today",
+  "content" : new BinData(0, ""),
+  "status" : "DRAFT"
+}

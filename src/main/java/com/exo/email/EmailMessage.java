@@ -107,4 +107,5 @@ public class EmailMessage implements Message {
 				+ ", targetKey=" + targetKey + ", bounceToEmail="
 				+ bounceToEmail + "]";
 	}
+
 }

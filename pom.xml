@@ -88,11 +88,34 @@
                </configuration>
             </plugin>
 
-            <plugin>
-               <groupId>org.apache.maven.plugins</groupId>
-               <artifactId>maven-surefire-plugin</artifactId>
-               <version>2.17</version>
-            </plugin>
+            <!-- disable surefire -->
+			<plugin>
+			  <groupId>org.apache.maven.plugins</groupId>
+			  <artifactId>maven-surefire-plugin</artifactId>
+			  <version>2.7</version>
+			  <configuration>
+			    <skipTests>true</skipTests>
+			  </configuration>
+			</plugin>
+			<!-- enable scalatest -->
+			<plugin>
+			  <groupId>org.scalatest</groupId>
+			  <artifactId>scalatest-maven-plugin</artifactId>
+			  <version>1.0</version>
+			  <configuration>
+			    <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
+			    <junitxml>.</junitxml>
+			    <filereports>WDF TestSuite.txt</filereports>
+			  </configuration>
+			  <executions>
+			    <execution>
+			      <id>test</id>
+			      <goals>
+			        <goal>test</goal>
+			      </goals>
+			    </execution>
+			  </executions>
+			</plugin>
 
 
             <!-- Integration tests plugin run "mvn verify" to invoke pre-integration-test, integration-test , and post-integration-test 
@@ -117,6 +140,14 @@
       </pluginManagement>
 
       <plugins>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-eclipse-plugin</artifactId>
+			<configuration>
+				<downloadSources>true</downloadSources>
+				<downloadJavadocs>true</downloadJavadocs>
+			</configuration>
+		</plugin>
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>

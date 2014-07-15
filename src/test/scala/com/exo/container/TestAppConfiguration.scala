@@ -6,7 +6,7 @@ import com.exo.engine.CampaignMaster
 import com.exo.engine.CampaignWorker
 import akka.actor.Props
 
-class TestAppConfiguration extends AppConfiguration {
+class TestAppConfiguration extends AppConfiguration() {
 
   override val campaignWorkerActor = bean("echo.engine.campaign-worker", scope = BeanDefinition.SCOPE_PROTOTYPE) {
     val ca = new CampaignWorker

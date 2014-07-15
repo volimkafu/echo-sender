@@ -2,7 +2,6 @@ package com.exo.email;
 
 import com.exo.engine.Target;
 
-
 public class EmailTarget implements Target {
 
 	private final String id;

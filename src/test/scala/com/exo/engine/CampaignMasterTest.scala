@@ -27,9 +27,6 @@ class CampaignMasterTest
   with Matchers {
 
   @Rule
-  val contactIds = (for (id <- (1 to 13)) yield toString).toList
-
-  @Rule
   val numberOfWorkers = BeansBuilder(classOf[TestAppConfiguration]).numberOfWorkers
 
   @Rule 

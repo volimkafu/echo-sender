@@ -4,19 +4,15 @@
    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <context:annotation-config />
-	<context:component-scan base-package="com.exo" />
-
-   <import resource="classpath:${env}-data-source.xml" />
+<!--  <context:annotation-config />
+   <context:component-scan base-package="com.exo.engine" />
+ -->
+ 
+   <import resource="classpath:data-source.xml" />
    <import resource="classpath:mail-source.xml" />
 
    <bean id="echo.data-access-service" class="com.exo.model.dao.impl.DataAccessServiceImpl">
-     <!--  
-  !!!FIXME:: see ApplicationConfiguration.scala - the props ${env:prod-}data-source.properties 
-  specified in the imported ${env:prod-}data-source.xml are not being read
- -->
-      <!-- <constructor-arg value="${db.schema}" /> -->
-      <constructor-arg value="echo" />
+      <constructor-arg value="test" />
       <constructor-arg ref="echo.db.client" />
    </bean>
 
@@ -24,7 +20,19 @@
       <constructor-arg ref="echo.data-access-service" />
    </bean>
 
-   <bean id="echo.engine.campaign-master.number-of-workers" class="java.lang.Integer">
-      <constructor-arg value="2" />
-   </bean>
+   <!-- AN: IMPORTANT: do not instantiate workers in spring config - 
+   master requests beans creation too rapidly, spring reflection 
+      chokes. Create workers in AppCofiguration.scala in programmatic way
+      -->
+   <!-- 
+    <bean id="echo.engine.campaign-worker" scope="prototype" class="com.exo.engine.CampaignWorker">
+      <property name="mailService">
+         <bean class="com.exo.container.MockEchoMailService" />
+      </property>
+   </bean> -->
+
+    <bean id="echo.engine.campaign-master.number-of-workers" class="java.lang.Integer">
+        <constructor-arg value="10"/>
+    </bean>
+    
 </beans>

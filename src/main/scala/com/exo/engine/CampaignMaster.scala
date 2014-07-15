@@ -1,13 +1,9 @@
 package com.exo.engine
 
-import org.slf4j.LoggerFactory
 import com.exo.model.Campaign
 import com.exo.model.Contact
 import com.exo.model.service.EchoDataService
-import akka.actor.Actor
-import akka.actor.ActorRef
-import akka.actor.Props
-import akka.actor.UntypedActor
+import akka.actor.{Actor, ActorRef, ActorLogging, Props, UntypedActor}
 import akka.actor.actorRef2Scala
 import net.sf.oval.constraint.NotNull
 import net.sf.oval.constraint.NotEmpty
@@ -16,9 +12,9 @@ import com.exo.engine.exception.CampaignMasterException
 
 class CampaignMaster(val numberOfWorkers: Int = 1)
   extends Actor
-  with Utils {
+  with Utils 
+  with ActorLogging {
 
-  val log = LoggerFactory.getLogger(classOf[CampaignMaster])
 
   @NotNull
   var dataService: EchoDataService = _
@@ -32,7 +28,13 @@ class CampaignMaster(val numberOfWorkers: Int = 1)
   private[this] var workerRouter: ActorRef = _
 
   override def preStart(): Unit = {
+    log.debug("Starting Campaign Master")
     workerRouter = context.actorOf(props.withRouter(new akka.routing.RoundRobinPool(numberOfWorkers)))
+  }
+
+  
+  override def preRestart(reason: Throwable, message: Option[Any]) {
+    log.error(reason, "Restarting due to [{}] when processing [{}]", reason.getMessage, message.getOrElse(""))
   }
 
   override def receive = {
@@ -57,11 +59,11 @@ class CampaignMaster(val numberOfWorkers: Int = 1)
         case ex: Exception => errorToSender("Failed to understand workers reply...", ex)
       }
 
-    case _ =>
-      log.error("Master got an unexpected request. Throwing IllegalArgumentException...")
+    case everythingElse =>
+      log.error( "Master got an unexpected request. Throwing IllegalArgumentException...")
       sender ! new IllegalArgumentException(
-        "From Master: Don't know how to handle..."
-          + " I deal with objects of type " + classOf[ChainRequest] + " and " + classOf[LinkSucceded])
+        "From Master: Don't know how to handle" + everythingElse
+          + "\n I deal with objects of type " + classOf[ChainRequest] + " and " + classOf[LinkSucceded])
   }
 
   protected def errorToSender(msg: String, ex: Exception) = sender ! new CampaignMasterException(msg, ex)

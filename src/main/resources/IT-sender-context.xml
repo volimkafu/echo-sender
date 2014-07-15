@@ -16,7 +16,7 @@
   specified in the imported ${env:prod-}data-source.xml are not being read
  -->
       <!-- <constructor-arg value="${db.schema}" /> -->
-      <constructor-arg value="echo" />
+      <constructor-arg value="integration-test-echo" />
       <constructor-arg ref="echo.db.client" />
    </bean>
 

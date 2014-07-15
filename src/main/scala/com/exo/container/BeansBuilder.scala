@@ -5,11 +5,20 @@ import akka.actor.ActorRef
 import akka.actor.ActorSystem
 import org.springframework.scala.context.function.FunctionalConfiguration
 
+
 object BeansBuilder {
-  def apply(configType : Class[_ <: FunctionalConfiguration]) = new BeansBuilder(configType)
+  
+  //?? java-style singleton. is there a scala type to instantiate BeansBuider(more like its 'context') once?
+  private[this] var instance: BeansBuilder = _
+  
+  def apply(configType: Class[ _ <: FunctionalConfiguration]) = {
+    if (instance == null)
+    	instance = new BeansBuilder(configType)
+    instance
+  }
 }
 
-class BeansBuilder (configType: Class[ _ <: FunctionalConfiguration]) {
+class BeansBuilder (configType: Class[ _ <: FunctionalConfiguration]){
 
   // create a Spring context
   implicit val context = FunctionalConfigApplicationContext(configType)
